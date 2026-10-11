@@ -113,7 +113,6 @@ class Matrix{
 
             }
             
-
             Complex term = this.matrix[0][j].composition(minor.determinant());
             if (j % 2 == 1) {
                 term = new Complex(-term.re, -term.im);
@@ -121,12 +120,57 @@ class Matrix{
             det = det.add(term);
         }
         return det;
+    }
 
+    Matrix division(Matrix that){
+        Complex det = that.determinant();
+        if (det.modul() < 1e-9){
+            System.out.println("Деление невозможно , определитель делителя вырожденный");
+            return null;
+        }
+        that = that.transpose();
+        Matrix allid_matrix = new Matrix(that.matrix.length, that.matrix[0].length);
+        for(int i =0; i < that.matrix.length; i++){
+            for(int j =0; j < that.matrix[i].length; j++){
+                Matrix minor = new Matrix(that.matrix.length - 1, that.matrix.length - 1); 
+                int row = 0;
+                int col = 0;
+                for(int k = 0; k<that.matrix.length;k++){
+                    for(int l = 0; l < that.matrix.length; l++ ){
+                        if ((i != k) && (j != l)){
+                            minor.set(row,col,that.matrix[k][l]);
+                            if (col < that.matrix.length - 2){
+                                col++;
+                            }
+                            else{
+                                row++;
+                                col = 0;
+                            }
+                        }
+                    }
+                }
+
+                Complex term = minor.determinant();
+                if ((((that.matrix.length - i - 1) + (that.matrix.length - j - 1)) % 2 == 1)) {
+                    term = new Complex(-term.re, -term.im);
+                }
+                allid_matrix.set(i,j,term);
+            }
+        }
+        //Complex det = that.determinant();
+        Complex one = new Complex(1,0);
+        det = one.division(det);
+        for (int i = 0; i < allid_matrix.matrix.length; i++) {
+            for (int j = 0; j < allid_matrix.matrix.length; j++) {
+                Complex val = allid_matrix.matrix[i][j].composition(det);
+                allid_matrix.set(i, j, val);
+            }
+        }
+        return this.composition(allid_matrix);  
     }
     }
 
-
-
+    
 class Complex{
     double re;
     double im;
