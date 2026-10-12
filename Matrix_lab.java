@@ -9,24 +9,24 @@ class Matrix_Lab {
 
 }
 class Matrix{
-    Complex[][] matrix;
-    Matrix(int m, int n){
+    private Complex[][] matrix;
+    public Matrix(int m, int n){
         this.matrix = new Complex[m][n];
     }
 
-    void set(int i, int j, Complex value){
+    public void set(int i, int j, Complex value){
         this.matrix[i][j] = value;
     }
 
-    Complex get(int i , int j){
+    public Complex get(int i , int j){
         return this.matrix[i][j];
 }
 
-    void output(){
+    public void output(){
         for(int i = 0; i < matrix.length; i++){
             for(int j = 0; j < matrix[i].length; j++){
                 if (this.matrix[i][j] != null){
-                    System.out.print(this.matrix[i][j].re + " + " + this.matrix[i][j].im + "i   ");
+                    System.out.print(this.matrix[i][j].getRe() + " + " + this.matrix[i][j].getIm() + "i   ");
                 }
                 else{
                     System.out.print("null  ");
@@ -36,7 +36,7 @@ class Matrix{
         }
     }
 
-    Matrix add(Matrix that){
+    public Matrix add(Matrix that){
         Matrix result = new Matrix(this.matrix.length,this.matrix[0].length);
         for(int i = 0; i < this.matrix.length; i++){
             for(int j = 0; j < this.matrix[i].length; j++){
@@ -47,7 +47,7 @@ class Matrix{
         return result;
     }
 
-    Matrix difference(Matrix that){
+    public Matrix difference(Matrix that){
         Matrix result = new Matrix(this.matrix.length,this.matrix[0].length);
         for(int i = 0; i < this.matrix.length; i++){
             for(int j = 0; j < this.matrix[i].length; j++){
@@ -58,7 +58,7 @@ class Matrix{
         return result;
     }
 
-    Matrix transpose(){
+    public Matrix transpose(){
         Matrix result = new Matrix(this.matrix[0].length,this.matrix.length);
         for(int i = 0; i < this.matrix.length; i++){
             for(int j = 0; j < this.matrix[i].length; j++){
@@ -69,8 +69,8 @@ class Matrix{
         return result;
     }
 
-    Matrix composition(Matrix that){
-        if (this.matrix[0].length == that.matrix.length){
+    public Matrix composition(Matrix that){
+        if (this.matrix[0].length != that.matrix.length){
             System.out.println("Нельзя умножить: размеры не совпадают");
             return null;
         }
@@ -88,7 +88,7 @@ class Matrix{
         return result;
     }
 
-    Complex determinant(){
+    public Complex determinant(){
         if(this.matrix.length != this.matrix[0].length){
             System.out.println("Ошибка.Матрица не квадратная.");
             return null;
@@ -115,14 +115,14 @@ class Matrix{
             
             Complex term = this.matrix[0][j].composition(minor.determinant());
             if (j % 2 == 1) {
-                term = new Complex(-term.re, -term.im);
+                term = new Complex(-term.getRe(), -term.getIm());
             }
             det = det.add(term);
         }
         return det;
     }
 
-    Matrix division(Matrix that){
+    public Matrix division(Matrix that){
         Complex det = that.determinant();
         if (det.modul() < 1e-9){
             System.out.println("Деление невозможно , определитель делителя вырожденный");
@@ -152,7 +152,7 @@ class Matrix{
 
                 Complex term = minor.determinant();
                 if ((((that.matrix.length - i - 1) + (that.matrix.length - j - 1)) % 2 == 1)) {
-                    term = new Complex(-term.re, -term.im);
+                    term = new Complex(-term.getRe(), -term.getIm());
                 }
                 allid_matrix.set(i,j,term);
             }
@@ -172,42 +172,42 @@ class Matrix{
 
     
 class Complex{
-    double re;
-    double im;
+    private double re;
+    private double im;
 
-    Complex(double re, double im) {
+    public Complex(double re, double im) {
     this.re = re;
     this.im = im;
 }
 
-void output() {
-    System.out.println(this.re + " + " + this.im + "i");
-}
-    Complex add(Complex that){
+    public void output() {
+        System.out.println(this.re + " + " + this.im + "i");
+    }
+    public Complex add(Complex that){
         return new Complex(
             this.re + that.re,
             this.im + that.im
         );
     }
 
-    Complex difference(Complex that){
+    public Complex difference(Complex that){
         return new Complex(
             this.re - that.re,
             this.im - that.im
         );
     }
-    Complex composition(Complex that){
+    public Complex composition(Complex that){
         return new Complex(
             this.re * that.re - this.im * that.im ,
             this.re * that.im + that.re * this.im
         );
     }
-    double modul(){
+    public double modul(){
         return 
             Math.sqrt(this.re * this.re + this.im * this.im);
     }
 
-    Complex division(Complex that){
+    public Complex division(Complex that){
         double denominator = that.modul();
         if (denominator == 0) {
             System.out.println("Деление на ноль!");
@@ -219,10 +219,12 @@ void output() {
         return result;
     }
 
-    Complex conjugation(){
+    public Complex conjugation(){
         return new Complex(
             this.re,
             -this.im
         );
     }
+    public double getRe() { return re; }
+    public double getIm() { return im; }
 }
