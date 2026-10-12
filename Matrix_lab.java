@@ -5,6 +5,8 @@ class Matrix_Lab {
         Complex a = new Complex(1,2);
         Complex b = new Complex(3,4);
         Complex c = a.add(b);
+        System.out.print("a + b = ");
+        a.add(b).output();
       }
 
 }
