@@ -1,15 +1,170 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
-class Matrix_Lab {
-    public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        Complex a = new Complex(1,2);
-        Complex b = new Complex(3,4);
-        Complex c = a.add(b);
-        System.out.print("a + b = ");
-        a.add(b).output();
-      }
 
+public class Matrix_lab {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        while (true) {
+            printMenu();
+            int choice = readInt(sc);
+
+            if (choice == 7) {
+                System.out.println("Выход");
+                return;
+            }
+
+            switch (choice) {
+                case 1: {
+                    System.out.println("Сложение. Убедитесь, что размеры матриц корректны для выполнения операции.");
+                    System.out.println("1 матрица:");
+                    Matrix a = readMatrix(sc);
+                    if (a == null) break; 
+                    System.out.println("2 матрица:");
+                    Matrix b = readMatrix(sc);
+                    if (b == null) break; 
+                    Matrix r = a.add(b);
+                    if (r != null) {
+                        System.out.println("Результат:");
+                        r.output();
+                    }
+                    break;
+                }
+                case 2: {
+                    System.out.println("Вычитание. Убедитесь, что размеры матриц корректны для выполнения операции.");
+                    System.out.println("1 матрица:");
+                    Matrix a = readMatrix(sc);
+                    if (a == null) break; 
+                    System.out.println("2 матрица:");
+                    Matrix b = readMatrix(sc);
+                    if (b == null) break; 
+                    Matrix r = a.difference(b);
+                    if (r != null) {
+                        System.out.println("Результат:");
+                        r.output();
+                    }
+                    break;
+                }
+                case 3: {
+                    System.out.println("Умножение. Убедитесь, что размеры матриц корректны для выполнения операции.");
+                    System.out.println("1 матрица:");
+                    Matrix a = readMatrix(sc);
+                    if (a == null) break; 
+                    System.out.println("2 матрица:");
+                    Matrix b = readMatrix(sc);
+                    if (b == null) break; 
+                    Matrix r = a.composition(b);
+                    if (r != null) {
+                        System.out.println("Результат:");
+                        r.output();
+                    }
+                    break;
+                }
+                case 4: {
+                    System.out.println("Транспонирование");
+                    Matrix a = readMatrix(sc);
+                    if (a == null) break;
+                    System.out.println("Результат:");
+                    a.transpose().output();
+                    break;
+                }
+                case 5: {
+                    System.out.println("Определитель. Убедитесь, что размер матрицы корректен для выполнения операции.");
+                    Matrix a = readMatrix(sc);
+                    if (a == null) break;
+                    Complex det = a.determinant();
+                    if (det != null) {
+                        System.out.print("Определитель: ");
+                        det.output();
+                    }
+                    break;
+                }
+                case 6: {
+                    System.out.println("Деление. Убедитесь, что размеры матриц корректны для выполнения операции.");
+                    System.out.println("1 матрица");
+                    Matrix a = readMatrix(sc);
+                    if (a == null) break; 
+                    System.out.println("2 матрица:");
+                    Matrix b = readMatrix(sc);
+                    if (b == null) break; 
+                    Matrix r = a.division(b);
+                    if (r != null) {
+                        System.out.println("Результат:");
+                        r.output();
+                    }
+                    break;
+                }
+                default:
+                    System.out.println("Неверный выбор");
+            }
+        }
+    }
+
+    public static void printMenu() {
+        System.out.println("\nМеню");
+        System.out.println("1. Сложить матрицы");
+        System.out.println("2. Вычесть матрицы");
+        System.out.println("3. Умножить матрицы");
+        System.out.println("4. Транспонировать матрицу");
+        System.out.println("5. Определитель матрицы");
+        System.out.println("6. Разделить матрицы");
+        System.out.println("7. Выход");
+        System.out.print("Выбор: ");
+    }
+
+    public static int readInt(Scanner sc) {
+        while (true) {
+            try {
+                return sc.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Ошибка: введите целое число.");
+                sc.nextLine();
+            }
+        }
+    }
+
+    public static double readDouble(Scanner sc) {
+        while (true) {
+            try {
+                return sc.nextDouble();
+            } catch (InputMismatchException e) {
+                System.out.println("Ошибка: введите число.");
+                sc.nextLine();
+            }
+        }
+    }
+
+    public static Matrix readMatrix(Scanner sc) {
+        System.out.print("Введите кол-во строк: ");
+        int rows = readInt(sc);
+
+        System.out.print("Введите кол-во столбцов: ");
+        int cols = readInt(sc);
+        if(rows <= 0 || cols <= 0){
+            System.out.println("Ошибка: количество строк и столбцов должно быть больше 0.");
+            return null;
+        }
+        System.out.print("Внимание! Ввод осуществляется построчно. ");
+
+        Matrix m = new Matrix(rows, cols);
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                System.out.print("Элемент [" + i + "][" + j + "] re: ");
+                double re = readDouble(sc);
+
+                System.out.print("Элемент [" + i + "][" + j + "] im: ");
+                double im = readDouble(sc);
+
+                m.set(i, j, new Complex(re, im));
+            }
+        }
+
+        return m;
+    }
 }
+
 class Matrix{
     private Complex[][] matrix;
     public Matrix(int m, int n){
@@ -39,6 +194,12 @@ class Matrix{
     }
 
     public Matrix add(Matrix that){
+        if (this.matrix.length != that.matrix.length ||
+            this.matrix[0].length != that.matrix[0].length) {
+            System.out.println("Ошибка: размеры не совпадают");
+            return null;
+        }
+
         Matrix result = new Matrix(this.matrix.length,this.matrix[0].length);
         for(int i = 0; i < this.matrix.length; i++){
             for(int j = 0; j < this.matrix[i].length; j++){
@@ -50,6 +211,11 @@ class Matrix{
     }
 
     public Matrix difference(Matrix that){
+        if (this.matrix.length != that.matrix.length ||
+            this.matrix[0].length != that.matrix[0].length) {
+            System.out.println("Ошибка: размеры не совпадают");
+            return null;
+        }
         Matrix result = new Matrix(this.matrix.length,this.matrix[0].length);
         for(int i = 0; i < this.matrix.length; i++){
             for(int j = 0; j < this.matrix[i].length; j++){
@@ -91,6 +257,9 @@ class Matrix{
     }
 
     public Complex determinant(){
+        if (matrix.length == 0) {
+            return new Complex(1, 0);
+        }
         if(this.matrix.length != this.matrix[0].length){
             System.out.println("Ошибка.Матрица не квадратная.");
             return null;
@@ -125,6 +294,10 @@ class Matrix{
     }
 
     public Matrix division(Matrix that){
+        if(this.matrix.length != this.matrix[0].length || that.matrix.length != that.matrix[0].length ){
+            System.out.println("Ошибка.Матрица не квадратная.");
+            return null;
+        }
         Complex det = that.determinant();
         if (det.modul() < 1e-9){
             System.out.println("Деление невозможно , определитель делителя вырожденный");
@@ -159,7 +332,6 @@ class Matrix{
                 allid_matrix.set(i,j,term);
             }
         }
-        //Complex det = that.determinant();
         Complex one = new Complex(1,0);
         det = one.division(det);
         for (int i = 0; i < allid_matrix.matrix.length; i++) {
@@ -185,6 +357,7 @@ class Complex{
     public void output() {
         System.out.println(this.re + " + " + this.im + "i");
     }
+
     public Complex add(Complex that){
         return new Complex(
             this.re + that.re,
@@ -198,6 +371,7 @@ class Complex{
             this.im - that.im
         );
     }
+
     public Complex composition(Complex that){
         return new Complex(
             this.re * that.re - this.im * that.im ,
