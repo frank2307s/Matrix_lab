@@ -161,6 +161,9 @@ public class Matrix_lab {
             }
         }
 
+        System.out.println("Введённая матрица:");
+        m.output();
+
         return m;
     }
 }
