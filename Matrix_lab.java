@@ -5,6 +5,8 @@ public class Matrix_lab {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        Matrix a = null;
+        Matrix b = null;
 
         while (true) {
             printMenu();
@@ -18,61 +20,110 @@ public class Matrix_lab {
             switch (choice) {
                 case 1: {
                     System.out.println("Сложение. Убедитесь, что размеры матриц корректны для выполнения операции.");
-                    System.out.println("1 матрица:");
-                    Matrix a = readMatrix(sc);
-                    if (a == null) break; 
+                    if (a == null) {
+                        System.out.println("1 матрица:");
+                        a = readMatrix(sc);
+                        if (a == null) break;
+                    } else {
+                        System.out.println("A:");
+                        a.output();
+                    } 
                     System.out.println("2 матрица:");
-                    Matrix b = readMatrix(sc);
+                    b = readMatrix(sc);
                     if (b == null) break; 
                     Matrix r = a.add(b);
                     if (r != null) {
                         System.out.println("Результат:");
                         r.output();
+                        a = r;
+                        System.out.println("Продолжить работать с результатом? 0 - нет , 1 - да");
+                        int answer = readInt(sc);
+                        if (answer != 1) {
+                            a = null;
+                        }
                     }
-                    break;
+                break;
                 }
                 case 2: {
                     System.out.println("Вычитание. Убедитесь, что размеры матриц корректны для выполнения операции.");
-                    System.out.println("1 матрица:");
-                    Matrix a = readMatrix(sc);
-                    if (a == null) break; 
+                    if (a == null) {
+                        System.out.println("1 матрица:");
+                        a = readMatrix(sc);
+                        if (a == null) break;
+                    } else {
+                        System.out.println("A:");
+                        a.output();
+                    } 
                     System.out.println("2 матрица:");
-                    Matrix b = readMatrix(sc);
+                    b = readMatrix(sc);
                     if (b == null) break; 
                     Matrix r = a.difference(b);
                     if (r != null) {
                         System.out.println("Результат:");
                         r.output();
+                        a = r;
+                        System.out.println("Продолжить работать с результатом? 0 - нет , 1 - да");
+                        int answer = readInt(sc);
+                        if (answer != 1) {
+                            a = null;
+                        }
                     }
-                    break;
+                break;
                 }
                 case 3: {
                     System.out.println("Умножение. Убедитесь, что размеры матриц корректны для выполнения операции.");
-                    System.out.println("1 матрица:");
-                    Matrix a = readMatrix(sc);
-                    if (a == null) break; 
+                    if (a == null) {
+                        System.out.println("1 матрица:");
+                        a = readMatrix(sc);
+                        if (a == null) break;
+                    } else {
+                        System.out.println("A:");
+                        a.output();
+                    } 
                     System.out.println("2 матрица:");
-                    Matrix b = readMatrix(sc);
+                    b = readMatrix(sc);
                     if (b == null) break; 
                     Matrix r = a.composition(b);
                     if (r != null) {
                         System.out.println("Результат:");
                         r.output();
+                        a = r;
+                        System.out.println("Продолжить работать с результатом? 0 - нет , 1 - да");
+                        int answer = readInt(sc);
+                        if (answer != 1) {
+                            a = null;
+                        }
                     }
-                    break;
+                break;
                 }
                 case 4: {
                     System.out.println("Транспонирование");
-                    Matrix a = readMatrix(sc);
-                    if (a == null) break;
+                    if (a == null) {
+                        System.out.println("Введите матрицу");
+                        a = readMatrix(sc);
+                        if (a == null) break;
+                    } else {
+                        System.out.println("Исходная матрица:");
+                        a.output();
+                    }
+                    a = a.transpose();      
                     System.out.println("Результат:");
-                    a.transpose().output();
+                    a.output();
+                    System.out.println("Продолжить работать с результатом? 0 - нет , 1 - да");
+                    int answer = readInt(sc);
+                    if (answer != 1) a = null;
                     break;
                 }
                 case 5: {
                     System.out.println("Определитель. Убедитесь, что размер матрицы корректен для выполнения операции.");
-                    Matrix a = readMatrix(sc);
-                    if (a == null) break;
+                    if (a == null) {
+                        a = readMatrix(sc);
+                        if (a == null) break;
+                    } else {
+                        System.out.println("Текущая матрица:");
+                        a.output();
+                    }
+
                     Complex det = a.determinant();
                     if (det != null) {
                         System.out.print("Определитель: ");
@@ -82,18 +133,29 @@ public class Matrix_lab {
                 }
                 case 6: {
                     System.out.println("Деление. Убедитесь, что размеры матриц корректны для выполнения операции.");
-                    System.out.println("1 матрица");
-                    Matrix a = readMatrix(sc);
-                    if (a == null) break; 
+                    if (a == null) {
+                        System.out.println("1 матрица:");
+                        a = readMatrix(sc);
+                        if (a == null) break;
+                    } else {
+                        System.out.println("A:");
+                        a.output();
+                    }  
                     System.out.println("2 матрица:");
-                    Matrix b = readMatrix(sc);
+                    b = readMatrix(sc);
                     if (b == null) break; 
                     Matrix r = a.division(b);
                     if (r != null) {
                         System.out.println("Результат:");
                         r.output();
+                        a = r;
+                        System.out.println("Продолжить работать с результатом? 0 - нет , 1 - да");
+                        int answer = readInt(sc);
+                        if (answer != 1) {
+                            a = null;
+                        }
                     }
-                    break;
+                break;
                 }
                 default:
                     System.out.println("Неверный выбор");
